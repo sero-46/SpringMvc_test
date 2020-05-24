@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.luv2code.springdemo.dao.CustomerDAO;
 import com.luv2code.springdemo.entity.Customer;
+import com.luv2code.springdemo.entity.Staff;
+
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -51,13 +53,24 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	@Transactional
-	public Customer searchCustomerId(int theId) {
-		// TODO Auto-generated method stub
-		return customerDAO.searchCustomerId(theId);
+	public List<Customer> searchCustomerId(String theName) {
+
+		return customerDAO.searchCustomerId(theName);
 	}
 
-	
+	@Override
+	@Transactional
+	public List<Staff> queryCustomerId(int theCusId) {
 
+		return customerDAO.queryCustomerId(theCusId);
+	}
+	
+	@Override
+	@Transactional
+	public List<Customer> searchcusStaff(int theCusId) {
+
+		return customerDAO.searchcusStaff(theCusId);
+	}
 
 	
 }

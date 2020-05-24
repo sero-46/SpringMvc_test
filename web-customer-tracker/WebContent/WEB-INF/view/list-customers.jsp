@@ -33,25 +33,38 @@ Welcome Page
 	
 	<input type="button" value="Add Customer"
 		   onclick="window.location.href='showAddForm';return false;"
-		   class="add-button"
-	/>
+		   class="add-button" />
 	<br><br>
 	
 	<form:form action="search" method="GET">
-                Search customer: <input type="number" name="theSearchId" />
-                
-                <input type="submit" value="Search" class="add-button" />
-            </form:form>
-	
+    <input type="text" name="theSearchName" placeholder="Enter the customer name"/>
+             
+	 <input type="submit" value="Search Customer" class="add-button" />
+	 
+     </form:form>
+     
+     
+     <form:form action="cusStaffquery" method="GET">
+     
+     <input type="number" name="cusId" placeholder="Enter the Customer Id"/>
+	 <input type="submit" value=" Search Staff" class="add-button" />
+	 
+	 
+     </form:form>
+     
+			
 	<table>
 	 	<tr>
+	 	
+	 	    <th>CustomerId</th> 
 	 		<th>First Name </th>
 	 		<th>Last Name </th>
-	 		<th>Email </th>	 
+	 		<th>Email </th>	
+	 		<th>City</th>	 		
 	 		<th>Action</th>		
 	 	</tr>
 	 	
-	 	<c:forEach var="temp" items="${customers_message}">
+	 	<c:forEach var="temp" items="${customers}">
 	 	
 	 	<c:url  var="updateLink" value="/customer/showUpdateForm">
 	 		<c:param name="customerId" value="${temp.id}"/>
@@ -59,16 +72,24 @@ Welcome Page
 	 	
 	 	<c:url  var="deleteLink" value="/customer/delete">
 	 		<c:param name="customerId" value="${temp.id}"/>
-	 	</c:url> 
+	 	</c:url>
 	 	
+	 	<c:url  var="queryLink" value="/customer/query">
+	 		<c:param name="cusId" value="${temp.staff_id}"/>
+	 	</c:url> 	
+	 		 	
 	 	<tr>
+	 		<td>${temp.id} </td>
 	 		<td>${temp.firstname}</td>
 	 		<td>${temp.lastname}</td>
-	 		<td>${temp.email} </td>
+	 		<td>${temp.email} </td>	 		
+	 		<td>${temp.staff.city }</td>
 	 		<td> <a href="${updateLink}">UPDATE</a>|
 	 		<a href="${deleteLink}"
 	 		  onclick="if(!(confirm('Are you sure you want to delet this customer>'))) return false"
-	 		>DELETE</a>
+	 		>DELETE</a>|
+	 		<a href="${queryLink}">QUERY</a>
+	 		
 	 		
 	 		</td>
 	 	</tr>

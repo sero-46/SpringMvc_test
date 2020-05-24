@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.luv2code.springdemo.entity.Customer;
+import com.luv2code.springdemo.entity.Staff;
 import com.luv2code.springdemo.service.CustomerService;
 
 
@@ -29,7 +30,7 @@ public class CustomerController {
 	{
 		List<Customer> customersList=customerService.getCustomers();
 	
-		theModel.addAttribute("customers_message",customersList);
+		theModel.addAttribute("customers",customersList);
 		return "list-customers";		
 	}
 	
@@ -51,6 +52,14 @@ public class CustomerController {
 		return "redirect:/customer/list";
 	}
 	
+	@GetMapping("/search")
+	public String searchCustomerId(@RequestParam("theSearchName") String theName, Model theModel)
+	{
+		List<Customer> cus=customerService.searchCustomerId(theName);
+		theModel.addAttribute("customers",cus);
+			
+		return "list-customers";
+	}
 	
 	@GetMapping("/showUpdateForm")
 	public String showUpdateForm(@RequestParam("customerId") int theId, Model theModel)
@@ -68,14 +77,24 @@ public class CustomerController {
 		return "redirect:/customer/list";
 	}
 	
-	@GetMapping("/search")
-	public String searchCustomerId(@RequestParam("theSearchId") int theId, Model theModel)
+	@GetMapping("/query")
+	public String queryCustomerId(@RequestParam("cusId") int theCusId, Model theModel)
 	{
-		Customer cus=customerService.searchCustomerId(theId);
-		theModel.addAttribute("customers_message",cus);
+		List<Staff> cus=customerService.queryCustomerId(theCusId);
+		theModel.addAttribute("staff",cus);
 			
-		return "list-customers";
+		return "list-staff";
 	}
+	
+	@GetMapping("/cusStaffquery")
+	public String searchcusStaff(@RequestParam("cusId") int theCusId, Model theModel)
+	{
+		List<Customer> cus=customerService.searchcusStaff(theCusId);
+		theModel.addAttribute("cusStaff",cus);
+			
+		return "list-cus-staff";
+	}
+	
 	
 }
 

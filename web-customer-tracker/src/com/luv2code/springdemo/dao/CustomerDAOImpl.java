@@ -1,5 +1,6 @@
 package com.luv2code.springdemo.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.luv2code.springdemo.entity.Customer;
+import com.luv2code.springdemo.entity.Staff;
+
 
 @Repository
 public class CustomerDAOImpl implements CustomerDAO {
@@ -23,8 +26,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public List<Customer> getCustomers() {
 		
 		Session currentSession=sessionFactory.getCurrentSession();
-		 
-		Query<Customer> theQuery=currentSession.createQuery("from Customer order by firstname",Customer.class);
+		String HQL="select c from Customer c LEFT JOIN  FETCH c.staff";
+		Query<Customer> theQuery=currentSession.createQuery(HQL,Customer.class);
 		List<Customer> customersList=theQuery.getResultList();
 		
 		return customersList;
@@ -60,21 +63,51 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	@Override
-	public Customer searchCustomerId(int theId) {
+	public List<Customer> searchCustomerId(String theName) {
 		
 		Session currentSession=sessionFactory.getCurrentSession();
-		Query<Customer> theQuery=
-		currentSession.createQuery("from Customer where id=:cusId").setParameter("cusId", theId);
-		Customer  customer=theQuery.getSingleResult();
+		Query  theQuery= null;
+		if (theName != null && theName.trim().length() > 0) {
+		theQuery=currentSession.createQuery("from Customer where lower(firstname) =:cusId", Customer.class);
+		theQuery.setParameter("cusId", theName.toLowerCase());
+		}
+		else {
+		theQuery =currentSession.createQuery("from Customer", Customer.class);			
+		}
+		List<Customer> customer =theQuery.getResultList();
 		return customer;
 	}
-
-
-
-
 	
-
-
+	@Override
+	public List<Staff> queryCustomerId(int theCusId) {
+		
+		Session currentSession=sessionFactory.getCurrentSession();
+		Query  theQuery= null;
+		theQuery =currentSession.createQuery("from Staff where stfIid=:cus_id", Staff.class);
+		theQuery.setParameter("cus_id", theCusId);
+			
+		
+		List<Staff> customer =theQuery.getResultList();
+		return customer;
+	}
+	
+	@Override
+	public List<Customer> searchcusStaff(int theCusId) {
+		
+		Session currentSession=sessionFactory.getCurrentSession();
+		//String HQL="select c from Customer c LEFT JOIN  FETCH c.staff where c.id=:stf_id";
+		//currentSession.createQuery(HQL,Customer.class);
+		//theQuery.setParameter("stf_id", theCusId);
+		Query<Customer> theQuery=null;
+		List<Customer> customer=new ArrayList<Customer>();
+		theQuery = currentSession.createSQLQuery("CALL user_query(:customerCode)")
+			.addEntity(Customer.class)
+			.setParameter("customerCode", theCusId);
+		 customer=theQuery.getResultList();
+		
+		return customer;
+	}
+	
 	
 
 }

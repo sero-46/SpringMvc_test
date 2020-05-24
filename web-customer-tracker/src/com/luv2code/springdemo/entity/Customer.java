@@ -1,16 +1,22 @@
 package com.luv2code.springdemo.entity;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="customer")
 public class Customer {
 
+		
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
@@ -25,11 +31,39 @@ public class Customer {
 	@Column(name="email")
 	private String email;
 
+	@Column(name="staff_id")
+	private int staffId;
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="staff_id", insertable = false, updatable = false)
+	private Staff staff;
+
+	
 	public Customer() {
 		
+	}	
+	
+	public Customer(String firstname, String lastname, String email, int staffId, Staff staff) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.staffId = staffId;
+		this.staff = staff;
 	}
 
-	public int getId() {
+	public Staff getStaff() {
+		return staff;
+	}
+
+	public int getStaff_id() {
+		return staffId;
+	}
+
+	public void setStaff_id(int staffId) {
+		this.staffId = staffId;
+	}
+
+	public long getId() {
 		return id;
 	}
 
@@ -63,9 +97,12 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email + "]";
+		return "Customer [staff=" + staff + ", id=" + id + ", firstname=" + firstname + ", lastname=" + lastname
+				+ ", email=" + email + ", staffId=" + staffId + "]";
 	}
+
 	
-	
+
+		
 	
 }

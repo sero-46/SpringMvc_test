@@ -3,6 +3,8 @@ package com.luv2code.springdemo.dao;
 import java.util.List;
 
 import com.luv2code.springdemo.entity.Customer;
+import com.luv2code.springdemo.entity.Staff;
+
 
 public interface CustomerDAO {
 	
@@ -14,7 +16,15 @@ public interface CustomerDAO {
 
 	public void deleteCustomerId(int theId);
 
-	public Customer searchCustomerId(int theId);
+	public List<Customer> searchCustomerId(String theName);
+
+	public List<Staff> queryCustomerId(int theCusId);
+
+	public List<Customer> searchcusStaff(int theCusId);
+
+	
+
+	
 	
 	
 	
